@@ -13,6 +13,8 @@ puts " _________      .__                  __________                           
         \/     \/          \/     \/          \/     \/|__|                       "
 
 # Print today's date
+time = Time.new
+puts "Today's Date: " + time.inspect.split[0]
 
 # Print "Products" in ascii art
 

@@ -1,3 +1,9 @@
+commit 2aa1dd757ac7b770c13ad0640244a77318feb87a
+Author: nekanayaka <nekanayaka@hollandcollege.com>
+Date:   Thu May 5 14:06:05 2016 +0000
+
+    When the program is run it writes the Sales report to the report.txt and implemented methods to calculate products data.
+
 commit 48e17fd5cb9e82d81aaf2609bd4b017e3dd02a82
 Author: nekanayaka <nekanayaka@hollandcollege.com>
 Date:   Wed May 4 16:25:53 2016 +0000

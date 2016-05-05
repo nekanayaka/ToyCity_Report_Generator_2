@@ -14,10 +14,10 @@ end
 
 # Print "Sales Report" in ascii art
 def print_heading
-	# 	puts " ____        _             ____                       _   
-	# / ___|  __ _| | ___  ___  |  _  ___ _ __   ___  _ __| |_ 
+	# 	puts " ____        _             ____                       _
+	# / ___|  __ _| | ___  ___  |  _  ___ _ __   ___  _ __| |_
 	# ___  / _` | |/ _ / __| | |_) / _  '_  / _ | '__| __|
-	#  ___) | (_| | |  __/__  |  _ <  __/ |_) | (_) | |  | |_ 
+	#  ___) | (_| | |  __/__  |  _ <  __/ |_) | (_) | |  | |_
 	# |____/ __,_|_|___||___/ |_| ____| .__/ ___/|_|   __|
 	#                                                 |_|"
 	puts   " ____        _             ____                       _   "
@@ -32,13 +32,13 @@ def print_heading
 		   				" ___) | (_| | |  __/\__ \ |  _ <  __/ |_) | (_) | |  | |_ " + "\n" +
 		   				"|____/ \__,_|_|\___||___/ |_| \_\___| .__/ \___/|_|   \__|" + "\n" +
 		   				"                         			|_|                    " + "\n")
-	
+
 end
 
 def make_products_section
-	
+
 	# Print "Products" in ascii art
-	
+
 	puts "                     _            _       "
 	puts "                    | |          | |      "
 	puts " _ __  _ __ ___   __| |_   _  ___| |_ ___ "
@@ -47,7 +47,7 @@ def make_products_section
 	puts "| .__/|_|  \\___/ \\__,_|\\__,_|\\___|\\__|___/"
 	puts "| |                                       "
 	puts "|_|                                       "
-	
+
 	$reports_file.write("                     _            _       " + "\n" +
 		 				"                    | |          | |      " + "\n" +
 		 				" _ __  _ __ ___   __| |_   _  ___| |_ ___ " + "\n" +
@@ -56,7 +56,7 @@ def make_products_section
 		 				"| .__/|_|  \\___/ \\__,_|\\__,_|\\___|\\__|___/" + "\n" +
 		 				"| |                                       " + "\n" +
 		 				"|_|                                       " + "\n")
-	
+
 	# For each product in the data set:
 		# Print the name of the toy
 		# Print the retail price of the toy
@@ -64,7 +64,7 @@ def make_products_section
 		# Calculate and print the total amount of sales
 		# Calculate and print the average price the toy sold for
 		# Calculate and print the average discount (% or $) based off the average sales price
-		
+
 	# $$products_hash.each_pair do |key, value|
 	# 	# puts key, value
 	# 	value.each do |k, v|
@@ -97,19 +97,19 @@ def make_products_section
 	   end
 	   puts "Total sales: $#{$total_sales_of_toy}"
 	   $reports_file.write("Total sales: $#{$total_sales_of_toy}" + "\n")
-	   
+
 	   def calculate_average_price
 	   	return $total_sales_of_toy/$total_purchases
 	   end
-	   
+
 	   def calculate_average_discount
 	   	return $products_hash['items'][$i]['full-price'].to_f - ($total_sales_of_toy/$total_purchases)
 	   end
-	   
+
 	   def calculate_average_percentage
 	   	return (100 - ((($total_sales_of_toy/$total_purchases) * 100) / $products_hash['items'][$i]['full-price'].to_f)).round(2)
 	   end
-	   
+
 	   puts "Average price the toy was sold for: $#{calculate_average_price}"
 	   $reports_file.write("Average price the toy was sold for: $#{calculate_average_price}" + "\n")
 	   puts "Average discount: $#{calculate_average_discount}"
@@ -132,14 +132,14 @@ def make_brands_section
 		puts "| |_) | | | (_| | | | | (_| \\__ \\"
 		puts "|_.__/|_|  \\__,_|_| |_|\\__,_|___/"
 		puts
-		
+
 		$reports_file.write(" _                         _     " + "\n" +
 			 				"| |                       | |    " + "\n" +
 			 				"| |__  _ __ __ _ _ __   __| |___ " + "\n" +
 			 				"| '_ \\| '__/ _` | '_ \\ / _` / __|" + "\n" +
 			 				"| |_) | | | (_| | | | | (_| \\__ \\" + "\n" +
 			 				"|_.__/|_|  \\__,_|_| |_|\\__,_|___/" + "\n")
-	
+
 	# For each brand in the data set:
 		# Print the name of the brand
 		# Count and print the number of the brand's toys we stock
@@ -147,27 +147,43 @@ def make_brands_section
 		# Calculate and print the total sales volume of all the brand's toys combined
 	$k = 0
 	while $k < $products_hash['items'].length  do
+
+    def calculate_lego_product_price
+      return (($products_hash['items'][0]['full-price'].to_f + $products_hash['items'][2]['full-price'].to_f)/2).round(2)
+    end
+
+    def calculate_lego_total_sales
+      return (($products_hash['items'][0]['full-price'].to_f * $products_hash['items'][0]['purchases'].length - 1) +
+	    ($products_hash['items'][2]['full-price'].to_f * $products_hash['items'][2]['purchases'].length - 1)).round(2)
+    end
+
+    def calculate_nano_product_price
+      return $products_hash['items'][$k + 1]['full-price'].to_f / 1
+    end
+
+    def calculate_nano_total_sales
+      return ($products_hash['items'][$k + 1]['full-price'].to_f * $products_hash['items'][$k + 1]['purchases'].length - 1)
+    end
+
 	  if $products_hash['items'][$k]['brand'] == "LEGO"
 	    puts "\nBrand: #{$products_hash['items'][0]['brand']}"
 	    $reports_file.write("\nBrand: #{$products_hash['items'][0]['brand']}" + "\n")
 	    puts "Number of products: #{$products_hash['items'][0]['stock']}"
 	    $reports_file.write("Number of products: #{$products_hash['items'][0]['stock']}" + "\n")
-	    puts "Average product price: $#{(($products_hash['items'][0]['full-price'].to_f + $products_hash['items'][2]['full-price'].to_f)/2).round(2)}"
-	    $reports_file.write("Average product price: $#{(($products_hash['items'][0]['full-price'].to_f + $products_hash['items'][2]['full-price'].to_f)/2).round(2)}" + "\n")
-	    puts "Total sales: $#{(($products_hash['items'][0]['full-price'].to_f * $products_hash['items'][0]['purchases'].length - 1) +
-	    ($products_hash['items'][2]['full-price'].to_f * $products_hash['items'][2]['purchases'].length - 1)).round(2)}"
-	    $reports_file.write("Total sales: $#{(($products_hash['items'][0]['full-price'].to_f * $products_hash['items'][0]['purchases'].length - 1) +
-	    ($products_hash['items'][2]['full-price'].to_f * $products_hash['items'][2]['purchases'].length - 1)).round(2)}" + "\n")
+	    puts "Average product price: $#{calculate_lego_product_price}"
+	    $reports_file.write("Average product price: $#{calculate_lego_product_price}" + "\n")
+	    puts "Total sales: $#{calculate_lego_total_sales}"
+	    $reports_file.write("Total sales: $#{calculate_lego_total_sales}" + "\n")
 	  end
 	  next if $k == 2
 	  puts "\nBrand: #{$products_hash['items'][$k + 1]['brand']}"
 	  $reports_file.write("\nBrand: #{$products_hash['items'][$k + 1]['brand']}" + "\n")
 	  puts "Number of products: #{$products_hash['items'][$k + 1]['stock']}"
 	  $reports_file.write("Number of products: #{$products_hash['items'][$k + 1]['stock']}" + "\n")
-	  puts "Average product price: $#{$products_hash['items'][$k + 1]['full-price'].to_f / 1}"
-	  $reports_file.write("Average product price: $#{$products_hash['items'][$k + 1]['full-price'].to_f / 1}" + "\n")
-	  puts "Total sales: $#{($products_hash['items'][$k + 1]['full-price'].to_f * $products_hash['items'][$k + 1]['purchases'].length - 1)}"
-	  $reports_file.write("Total sales: $#{($products_hash['items'][$k + 1]['full-price'].to_f * $products_hash['items'][$k + 1]['purchases'].length - 1)}" + "\n")
+	  puts "Average product price: $#{calculate_nano_product_price}"
+	  $reports_file.write("Average product price: $#{calculate_nano_product_price}" + "\n")
+	  puts "Total sales: $#{calculate_nano_total_sales}"
+	  $reports_file.write("Total sales: $#{calculate_nano_total_sales}" + "\n")
 	  break if $products_hash['items'][$k]['brand'] == $products_hash['items'][$products_hash['items'].length - 1]['brand']
 	  $k += 1
 	end
@@ -190,7 +206,3 @@ def start
 end
 
 start # call start method to trigger report generation
-
-
-
-

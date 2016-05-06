@@ -10,8 +10,8 @@ def setup_files
     path = File.join(File.dirname(__FILE__), '../data/products.json')
     file = File.read(path)
     $products_hash = JSON.parse(file)
-    report_file = File.new("../report.txt", "w+")
-    $reports_file = File.open('../report.txt','a')
+    report_file = File.new("report.txt", "w+")
+    $reports_file = File.open('report.txt','a')
 end
 
 # Print "Sales Report" in ascii art

@@ -67,61 +67,58 @@ def make_products_section
 		# Calculate and print the average price the toy sold for
 		# Calculate and print the average discount (% or $) based off the average sales price
 
-	# $$products_hash.each_pair do |key, value|
-	# 	# puts key, value
-	# 	value.each do |k, v|
-	# 		print k
-	# 	end
-	# end
-	$total_sales = 0
-	$i = 0
-	while $i < $products_hash['items'].length  do
-	   puts "\nToy name: " + $products_hash['items'][$i]['title']
-	   $reports_file.write("\n" + 'Toy name: ' + $products_hash['items'][$i]['title'] + "\n")
-	   #File.write('../report.txt', 'Toy name: ' + $products_hash['items'][$i]['title'])
-	   puts "Retail Price: $" + $products_hash['items'][$i]['full-price']
-	   $reports_file.write("Retail Price: $" + $products_hash['items'][$i]['full-price'] + "\n")
-	   $total_purchases = 0
-	   $total_purchases += $products_hash['items'][$i]['purchases'].length
-	   puts "Total purchases: #{$total_purchases}"
-	   $reports_file.write("Total purchases: #{$total_purchases}" + "\n")
-	   $total_sales_of_toy = 0
-	   $j = 0
-	   while $j < $products_hash['items'][$i]['purchases'].length do
-	    total_price = 0
-	    total_price += $products_hash['items'][$i]['purchases'][$j]['price'] + $products_hash['items'][$i]['purchases'][$j]['shipping']
-	    total_price_without_shipping = $products_hash['items'][$i]['purchases'][$j]['price']
-	    # puts "Toy purchase price: #{$products_hash['items'][$i]['purchases'][$j]['price']}"
-	    # puts "Total price for the toy \"#{$products_hash['items'][$i]['title']}\"(Including shipping) purchased by #{$products_hash['items'][$i]['purchases'][$j]['user']["name"]}: #{total_price}"
-	    $total_sales += total_price
-	    $total_sales_of_toy += total_price_without_shipping
-	    $j += 1
-	   end
-	   puts "Total sales: $#{$total_sales_of_toy}"
-	   $reports_file.write("Total sales: $#{$total_sales_of_toy}" + "\n")
+    def products_data
+      $products_hash["items"].each do |toy|
+          # toy_result = calculate_products_data(toy)
+          print_products_data(toy)
+      end
+    end
 
-	   def calculate_average_price
-	   	return $total_sales_of_toy/$total_purchases
-	   end
+    def get_total_purchases(toy)
+      total_purchases = 0
+      total_purchases += toy['purchases'].length
+      return total_purchases
+    end
 
-	   def calculate_average_discount
-	   	return $products_hash['items'][$i]['full-price'].to_f - ($total_sales_of_toy/$total_purchases)
-	   end
+    def calculate_total_amount_of_sales(toy)
+      total_price = 0
+      toy["purchases"].each do |toy_purchase|
+        total_price += toy_purchase["price"]
+      end
+      return total_price
+    end
 
-	   def calculate_average_percentage
-	   	return (100 - ((($total_sales_of_toy/$total_purchases) * 100) / $products_hash['items'][$i]['full-price'].to_f)).round(2)
-	   end
+    def calculate_average_price(total_sales, total_purchases)
+      return total_sales/total_purchases
+    end
 
-	   puts "Average price the toy was sold for: $#{calculate_average_price}"
-	   $reports_file.write("Average price the toy was sold for: $#{calculate_average_price}" + "\n")
-	   puts "Average discount: $#{calculate_average_discount}"
-	   $reports_file.write("Average discount: $#{calculate_average_discount}" + "\n")
-	   puts "Average discount percentage: #{calculate_average_percentage}%"
-	   $reports_file.write("Average discount percentage: #{calculate_average_percentage}%" + "\n")
-	   $i += 1
-	end
-	# $reports_file.close
-	puts "\nTotal sales (All toys): $#{$total_sales}"
+    def calculate_average_discount(toy, average_price)
+      return toy["full-price"].to_f - average_price
+    end
+
+    def calculate_average_percentage(average_price, toy)
+      return (100 - ((average_price * 100) / toy['full-price'].to_f)).round(2)
+    end
+
+    def print_products_data(toy)
+      # all printing is here
+      puts "Toy name: #{toy['title']}\n"
+      $reports_file.write("Toy name: #{toy['title']}\n")
+      puts "Total_purchases: #{get_total_purchases(toy)}\n"
+      $reports_file.write("Total_purchases: #{get_total_purchases(toy)}\n")
+      puts "Total sales: $#{calculate_total_amount_of_sales(toy)}\n"
+      $reports_file.write("Total sales: $#{calculate_total_amount_of_sales(toy)}\n")
+      puts "Average price the toy was sold for: $#{calculate_average_price(calculate_total_amount_of_sales(toy), get_total_purchases(toy))}\n"
+      $reports_file.write("Average price the toy was sold for: $#{calculate_average_price(calculate_total_amount_of_sales(toy), get_total_purchases(toy))}\n")
+      puts "Average discount: $#{calculate_average_discount(toy, calculate_average_price(calculate_total_amount_of_sales(toy), get_total_purchases(toy)))}\n"
+      $reports_file.write("Average discount: $#{calculate_average_discount(toy, calculate_average_price(calculate_total_amount_of_sales(toy), get_total_purchases(toy)))}\n")
+      puts "Average discount percentage: #{calculate_average_percentage(calculate_average_price(calculate_total_amount_of_sales(toy), get_total_purchases(toy)), toy)}%\n"
+      $reports_file.write("Average discount percentage: #{calculate_average_percentage(calculate_average_price(calculate_total_amount_of_sales(toy), get_total_purchases(toy)), toy)}%\n\n")
+
+    end
+
+    products_data
+
 end
 
 def make_brands_section

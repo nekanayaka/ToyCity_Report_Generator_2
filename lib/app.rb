@@ -144,48 +144,61 @@ def make_brands_section
 		# Count and print the number of the brand's toys we stock
 		# Calculate and print the average price of the brand's toys
 		# Calculate and print the total sales volume of all the brand's toys combined
-	$k = 0
-	while $k < $products_hash['items'].length  do
+  def brands_data
+    $products_hash["items"].each do |toy|
+      lego_toys = Array.new
+      other_toys = Array.new
+      if toy["brand"] == "LEGO"
+        lego_toys.push(toy)
+        $avg_brand_price = calculate_average_brand_price(lego_toys)
+        $total_brand_sales = calculate_brand_total_sales(lego_toys)
+        lego_toys.delete_if {|lego_toy| lego_toy["stock"] != 55}
+        # first_index = lego_toys.index(lego_toys.find { |lego_toy| lego_toy["stock"] == 55})
+        # lego_toys.delete_if {lego_toys.index() != 0}
+      else
+        other_toys.push(toy)
+      end
+        # lego_toys.delete_if {|lego_toy| lego_toy["stock"] != 55}
 
-    def calculate_lego_product_price
-      return (($products_hash['items'][0]['full-price'].to_f + $products_hash['items'][2]['full-price'].to_f)/2).round(2)
+        print_brands_data(other_toys)
+        print_brands_data(lego_toys)
     end
+  end
 
-    def calculate_lego_total_sales
-      return (($products_hash['items'][0]['full-price'].to_f * $products_hash['items'][0]['purchases'].length - 1) +
-	    ($products_hash['items'][2]['full-price'].to_f * $products_hash['items'][2]['purchases'].length - 1)).round(2)
+  def print_brands_data(toys)
+    toys.each do |toy|
+      puts "Brand: #{toy["brand"]}"
+      puts "Stock: #{toy["stock"]}"
+      # puts "Average brand price: #{calculate_average_brand_price(toys)}"
+      # puts "Total brand sales: #{calculate_brand_total_sales(toys)}"
+      # next if toy["stock"] == 0
+      if toy["brand"] == "LEGO"
+        puts "Average brand price: #{$avg_brand_price}"
+        puts "Total brand sales: #{$total_brand_sales}"
+      else
+        puts "Average brand price: #{calculate_average_brand_price(toys)}"
+        puts "Total brand sales: #{calculate_brand_total_sales(toys)}"
+      end
     end
+  end
 
-    def calculate_nano_product_price
-      return $products_hash['items'][$k + 1]['full-price'].to_f / 1
+  def calculate_average_brand_price(toys)
+    total = 0
+    toys.each do |toy|
+      total += toy["full-price"].to_f
     end
+    return (total / toys.length).round(2)
+  end
 
-    def calculate_nano_total_sales
-      return ($products_hash['items'][$k + 1]['full-price'].to_f * $products_hash['items'][$k + 1]['purchases'].length - 1)
+  def calculate_brand_total_sales(toys)
+    toy_sales = 0
+    toys.each do |toy|
+      toy_sales += toy["full-price"].to_f * toy["purchases"].length
     end
+    return toy_sales
+  end
 
-	  if $products_hash['items'][$k]['brand'] == "LEGO"
-	    puts "\nBrand: #{$products_hash['items'][0]['brand']}"
-	    $reports_file.write("\nBrand: #{$products_hash['items'][0]['brand']}" + "\n")
-	    puts "Number of products: #{$products_hash['items'][0]['stock']}"
-	    $reports_file.write("Number of products: #{$products_hash['items'][0]['stock']}" + "\n")
-	    puts "Average product price: $#{calculate_lego_product_price}"
-	    $reports_file.write("Average product price: $#{calculate_lego_product_price}" + "\n")
-	    puts "Total sales: $#{calculate_lego_total_sales}"
-	    $reports_file.write("Total sales: $#{calculate_lego_total_sales}" + "\n")
-	  end
-	  next if $k == 2
-	  puts "\nBrand: #{$products_hash['items'][$k + 1]['brand']}"
-	  $reports_file.write("\nBrand: #{$products_hash['items'][$k + 1]['brand']}" + "\n")
-	  puts "Number of products: #{$products_hash['items'][$k + 1]['stock']}"
-	  $reports_file.write("Number of products: #{$products_hash['items'][$k + 1]['stock']}" + "\n")
-	  puts "Average product price: $#{calculate_nano_product_price}"
-	  $reports_file.write("Average product price: $#{calculate_nano_product_price}" + "\n")
-	  puts "Total sales: $#{calculate_nano_total_sales}"
-	  $reports_file.write("Total sales: $#{calculate_nano_total_sales}" + "\n")
-	  break if $products_hash['items'][$k]['brand'] == $products_hash['items'][$products_hash['items'].length - 1]['brand']
-	  $k += 1
-	end
+  brands_data
 	$reports_file.close
 end
 

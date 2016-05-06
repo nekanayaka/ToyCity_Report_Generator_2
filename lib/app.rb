@@ -1,8 +1,10 @@
 require 'json'
 
 # Print today's date
-time = Time.new
-puts "Today's Date: " + time.inspect.split[0]
+def print_date
+  time = Time.new
+  puts "Today's Date: " + time.inspect.split[0]
+end
 
 def setup_files
     path = File.join(File.dirname(__FILE__), '../data/products.json')
@@ -201,6 +203,7 @@ def create_report
 end
 
 def start
+  print_date
   setup_files # load, read, parse, and create the files
   create_report # create the report!
 end

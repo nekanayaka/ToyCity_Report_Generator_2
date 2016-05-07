@@ -112,7 +112,7 @@ def make_products_section
       $reports_file.write("Average price the toy was sold for: $#{calculate_average_price(calculate_total_amount_of_sales(toy), get_total_purchases(toy))}\n")
       puts "Average discount: $#{calculate_average_discount(toy, calculate_average_price(calculate_total_amount_of_sales(toy), get_total_purchases(toy)))}\n"
       $reports_file.write("Average discount: $#{calculate_average_discount(toy, calculate_average_price(calculate_total_amount_of_sales(toy), get_total_purchases(toy)))}\n")
-      puts "Average discount percentage: #{calculate_average_percentage(calculate_average_price(calculate_total_amount_of_sales(toy), get_total_purchases(toy)), toy)}%\n"
+      puts "Average discount percentage: #{calculate_average_percentage(calculate_average_price(calculate_total_amount_of_sales(toy), get_total_purchases(toy)), toy)}%\n\n"
       $reports_file.write("Average discount percentage: #{calculate_average_percentage(calculate_average_price(calculate_total_amount_of_sales(toy), get_total_purchases(toy)), toy)}%\n\n")
 
     end
@@ -144,60 +144,89 @@ def make_brands_section
 		# Count and print the number of the brand's toys we stock
 		# Calculate and print the average price of the brand's toys
 		# Calculate and print the total sales volume of all the brand's toys combined
-  def brands_data
-    $products_hash["items"].each do |toy|
-      lego_toys = Array.new
-      other_toys = Array.new
-      if toy["brand"] == "LEGO"
-        lego_toys.push(toy)
-        $avg_brand_price = calculate_average_brand_price(lego_toys)
-        $total_brand_sales = calculate_brand_total_sales(lego_toys)
-        lego_toys.delete_if {|lego_toy| lego_toy["stock"] != 55}
-        # first_index = lego_toys.index(lego_toys.find { |lego_toy| lego_toy["stock"] == 55})
-        # lego_toys.delete_if {lego_toys.index() != 0}
-      else
-        other_toys.push(toy)
-      end
-        # lego_toys.delete_if {|lego_toy| lego_toy["stock"] != 55}
 
-        print_brands_data(other_toys)
-        print_brands_data(lego_toys)
-    end
-  end
-
-  def print_brands_data(toys)
-    toys.each do |toy|
-      puts "Brand: #{toy["brand"]}"
-      puts "Stock: #{toy["stock"]}"
-      # puts "Average brand price: #{calculate_average_brand_price(toys)}"
-      # puts "Total brand sales: #{calculate_brand_total_sales(toys)}"
-      # next if toy["stock"] == 0
-      if toy["brand"] == "LEGO"
-        puts "Average brand price: #{$avg_brand_price}"
-        puts "Total brand sales: #{$total_brand_sales}"
-      else
-        puts "Average brand price: #{calculate_average_brand_price(toys)}"
-        puts "Total brand sales: #{calculate_brand_total_sales(toys)}"
+	def get_prices(brand)
+	  prices = []
+	  $products_hash["items"].each do |item|
+	    item["purchases"].each do |purchase|
+  	    if verify_brand?(brand, item)
+  	     prices << purchase["price"]
+  	    end
+  	  end
+	  end
+	  prices
+	end
+	
+	def get_retail_prices(brand)
+	  retail_prices = []
+	  $products_hash["items"].each do |item|
+	    if verify_brand?(brand, item)
+	     retail_prices << item["full-price"].to_f
+	    end
+  	end
+	  retail_prices
+	end
+	
+	def get_stock(brand)
+    stock = 0
+    $products_hash["items"].each do |item|
+      if verify_brand?(brand, item)
+        stock += item["stock"]
       end
     end
+    stock
   end
-
-  def calculate_average_brand_price(toys)
-    total = 0
-    toys.each do |toy|
-      total += toy["full-price"].to_f
+	
+	def get_total_price(prices)
+	  total_price = 0
+	  prices.each do |price|
+	    total_price += price
+	  end
+	  total_price
+	end
+	
+	def get_total_retail_prices(retail_prices)
+	  total_price = 0
+	  retail_prices.each do |price|
+	    total_price += price
+	  end
+	  total_price
+	end
+	
+	def verify_brand?(brand, toy)
+	  toy["brand"] == brand
+	end
+	
+	def get_brand
+	  toy_brands = []
+	  $products_hash["items"].each do |item|
+	    toy_brands << item["brand"]
+	  end
+	  toy_brands.uniq!
+	end
+	
+	def average_price(total_price, prices)
+	  average_price = 0
+	  average_price = (total_price/prices.length).round(2)
+	  average_price
+	end
+	
+	def brands_data
+    toy_brand = get_brand
+    toy_brand.each do |brand|
+      puts "Brand: #{brand}\n"
+      $reports_file.write("Brand: #{brand}\n")
+      prices = get_prices(brand)
+      total_stock = get_stock(brand)
+      retail_prices = get_retail_prices(brand)
+      puts "Stock: #{total_stock}\n"
+      $reports_file.write("Stock: #{total_stock}\n")
+      puts "Average price: #{average_price(get_total_retail_prices(prices), prices)}\n"
+      $reports_file.write("Average price: #{average_price(get_total_retail_prices(prices), prices)}\n")
+      puts "Total sales: #{get_total_price(prices).round(2)}\n\n"
+      $reports_file.write("Total sales: #{get_total_price(prices).round(2)}\n\n")
     end
-    return (total / toys.length).round(2)
   end
-
-  def calculate_brand_total_sales(toys)
-    toy_sales = 0
-    toys.each do |toy|
-      toy_sales += toy["full-price"].to_f * toy["purchases"].length
-    end
-    return toy_sales
-  end
-
   brands_data
 	$reports_file.close
 end

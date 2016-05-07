@@ -1,3 +1,39 @@
+commit e10147450c0a4e273cbae1cc67db50fc1a41a0fb
+Author: nekanayaka <nekanayaka@hollandcollege.com>
+Date:   Sat May 7 17:37:29 2016 +0000
+
+    Updated calculate and print methods for brands section.
+
+commit 2d9f4ca466e2352efa530b481ebbc50ff6fc6a48
+Author: Nimna Ekanayaka <nimna@nimna.me>
+Date:   Fri May 6 13:51:04 2016 -0300
+
+    Added methods to brands to calculate and display info.
+
+commit d36e071100d958dad4463cbede6621ac06d7cbe1
+Author: Nimna Ekanayaka <nimna@nimna.me>
+Date:   Fri May 6 11:15:00 2016 -0300
+
+    Products data is being calculated and printed on unique methods.
+
+commit 9d4b9d6b34b13a9b9860afcf3d4324e01dfb5acf
+Author: Nimna Ekanayaka <nimna@nimna.me>
+Date:   Fri May 6 10:02:03 2016 -0300
+
+    Saving reports.txt to the root of the program now.
+
+commit dbb2a9d3c602709a4e82b99b8e526f9d94a9a988
+Author: Nimna Ekanayaka <nimna@nimna.me>
+Date:   Fri May 6 09:59:48 2016 -0300
+
+    Date is printed through a method now.
+
+commit 45d6fb795f87b71733f83b3e4323b1f87789f117
+Author: Nimna Ekanayaka <nimna@nimna.me>
+Date:   Thu May 5 14:13:06 2016 -0300
+
+    Added methods to calculate product price and total sales in the brands category
+
 commit 2aa1dd757ac7b770c13ad0640244a77318feb87a
 Author: nekanayaka <nekanayaka@hollandcollege.com>
 Date:   Thu May 5 14:06:05 2016 +0000
